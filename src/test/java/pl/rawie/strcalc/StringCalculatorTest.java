@@ -15,4 +15,9 @@ public class StringCalculatorTest {
     public void emptyString() {
         assertThat(add(""), is(equalTo(0)));
     }
+
+    @Test
+    public void oneNumber() {
+        assertThat(add("1"), is(equalTo(1)));
+    }
 }
