@@ -6,12 +6,54 @@ public class StringCalculator {
     public int add(String input) {
         if (input.isEmpty())
             return 0;
+        Parser parser = new Parser(input);
+        int[] numbers = parser.numbers();
+        return sum(numbers);
+    }
 
-        String[] numbers = input.split(",|\n");
-
+    private int sum(int[] numbers) {
         int sum = 0;
-        for (String number : numbers)
-            sum += parseInt(number);
+        for (int number : numbers)
+            sum += number;
         return sum;
+    }
+
+    private class Parser {
+        private String delimiter;
+        private String input;
+
+        private Parser(String input) {
+            init(input);
+        }
+
+        private void init(String input) {
+            if (hasDefinedDelimiter(input)) {
+                int i = input.indexOf('\n');
+                delimiter = input.substring(2, i);
+                this.input = input.substring(i + 1);
+            } else {
+                delimiter = ",|\n";
+                this.input = input;
+            }
+        }
+
+        private boolean hasDefinedDelimiter(String input) {
+            return input.startsWith("//");
+        }
+
+        public int[] numbers() {
+            return parseNumbers(split());
+        }
+
+        private String[] split() {
+            return input.split(delimiter);
+        }
+
+        private int[] parseNumbers(String[] strings) {
+            int[] numbers = new int[strings.length];
+            for (int i = 0; i < strings.length; i++)
+                numbers[i] = parseInt(strings[i]);
+            return numbers;
+        }
     }
 }

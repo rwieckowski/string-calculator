@@ -35,4 +35,9 @@ public class StringCalculatorTest {
     public void newLineDelimiter() {
         assertThat(add("1\n2,3"), is(equalTo(6)));
     }
+
+    @Test
+    public void definedDelimiter() {
+        assertThat(add("//;\n1;2"), is(equalTo(3)));
+    }
 }
