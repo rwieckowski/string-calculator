@@ -56,4 +56,9 @@ public class StringCalculatorTest {
     public void oneNegative() {
         assertThatExceptionMessageFor("1,-1", is(equalTo("-1")));
     }
+
+    @Test
+    public void twoNegatives() {
+        assertThatExceptionMessageFor("1,-1,2,-2", is(equalTo("-1,-2")));
+    }
 }

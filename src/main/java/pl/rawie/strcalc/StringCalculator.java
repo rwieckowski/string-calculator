@@ -13,9 +13,15 @@ public class StringCalculator {
     }
 
     private void requireNonNegative(int[] numbers) {
+        String message = "";
         for (int number : numbers)
-            if (number < 0)
-                throw new IllegalArgumentException(Integer.toString(number));
+            if (number < 0) {
+                if (!message.isEmpty())
+                    message += ',';
+                message += Integer.toString(number);
+            }
+        if (!message.isEmpty())
+            throw new IllegalArgumentException(message);
     }
 
     private int sum(int[] numbers) {
