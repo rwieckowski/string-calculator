@@ -8,7 +8,14 @@ public class StringCalculator {
             return 0;
         Parser parser = new Parser(input);
         int[] numbers = parser.numbers();
+        requireNonNegative(numbers);
         return sum(numbers);
+    }
+
+    private void requireNonNegative(int[] numbers) {
+        for (int number : numbers)
+            if (number < 0)
+                throw new IllegalArgumentException(Integer.toString(number));
     }
 
     private int sum(int[] numbers) {
