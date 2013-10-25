@@ -30,4 +30,9 @@ public class StringCalculatorTest {
     public void multipleNumbers() {
         assertThat(add("1,2,3"), is(equalTo(6)));
     }
+
+    @Test
+    public void newLineDelimiter() {
+        assertThat(add("1\n2,3"), is(equalTo(6)));
+    }
 }
