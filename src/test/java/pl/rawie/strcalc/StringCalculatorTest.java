@@ -25,4 +25,9 @@ public class StringCalculatorTest {
     public void twoNumbers() {
         assertThat(add("1,2"), is(equalTo(3)));
     }
+
+    @Test
+    public void multipleNumbers() {
+        assertThat(add("1,2,3"), is(equalTo(6)));
+    }
 }
