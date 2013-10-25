@@ -22,7 +22,7 @@ public class StringCalculatorTest {
     }
 
     @Test
-    public void twoNumber() {
+    public void twoNumbers() {
         assertThat(add("1,2"), is(equalTo(3)));
     }
 }
