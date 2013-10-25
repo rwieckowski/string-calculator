@@ -20,4 +20,9 @@ public class StringCalculatorTest {
     public void oneNumber() {
         assertThat(add("1"), is(equalTo(1)));
     }
+
+    @Test
+    public void twoNumber() {
+        assertThat(add("1,2"), is(equalTo(3)));
+    }
 }
