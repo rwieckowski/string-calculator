@@ -53,6 +53,11 @@ public class StringCalculatorTest {
     }
 
     @Test
+    public void definedDelimiterWithEmptyString() {
+        assertThat(add("//;\n"), is(equalTo(0)));
+    }
+
+    @Test
     public void oneNegative() {
         assertThatExceptionMessageFor("1,-1", is(equalTo("-1")));
     }

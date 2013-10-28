@@ -1,72 +1,83 @@
 package pl.rawie.strcalc;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import static java.lang.Integer.parseInt;
+import static java.util.Arrays.asList;
 
 public class StringCalculator {
     public int add(String input) {
-        if (input.isEmpty())
-            return 0;
-        Parser parser = new Parser(input);
-        int[] numbers = parser.numbers();
-        requireNonNegative(numbers);
+        List<String> strings = splitNumbers(input);
+        List<Integer> numbers = parseNumbers(strings);
+        rejectNegatives(numbers);
         return sum(numbers);
     }
 
-    private void requireNonNegative(int[] numbers) {
-        String message = "";
-        for (int number : numbers)
-            if (number < 0) {
-                if (!message.isEmpty())
-                    message += ',';
-                message += Integer.toString(number);
-            }
-        if (!message.isEmpty())
-            throw new IllegalArgumentException(message);
+    private List<String> splitNumbers(String input) {
+        DelimiterWithNumbers dn = extractDelimiterWithNumbers(input);
+        return split(dn);
     }
 
-    private int sum(int[] numbers) {
+    private List<String> split(DelimiterWithNumbers input) {
+        return asList(input.numbers.split(input.delimiter));
+    }
+
+    private DelimiterWithNumbers extractDelimiterWithNumbers(String input) {
+        if (hasDefinedDelimiter(input)) {
+            int i = input.indexOf('\n');
+            String delimiter = input.substring(2, i);
+            String numbers = input.substring(i + 1);
+            return new DelimiterWithNumbers(delimiter, numbers);
+        } else
+            return new DelimiterWithNumbers(",|\n", input);
+    }
+
+    private boolean hasDefinedDelimiter(String input) {
+        return input.startsWith("//");
+    }
+
+    private List<Integer> parseNumbers(List<String> strings) {
+        List<Integer> numbers = new ArrayList<Integer>();
+        for (String string : strings)
+            numbers.add(parseInt(string));
+        return numbers;
+    }
+
+    private void rejectNegatives(List<Integer> numbers) {
+        List<Integer> negatives = new ArrayList<Integer>();
+        for (int number : numbers)
+            if (number < 0)
+                negatives.add(number);
+
+        if (!negatives.isEmpty())
+            throw new IllegalArgumentException(formatMessage(negatives));
+    }
+
+    private String formatMessage(List<Integer> numbers) {
+        String message = "";
+        Iterator<Integer> it = numbers.iterator();
+        message += it.next();
+        while (it.hasNext())
+            message += "," + it.next();
+        return message;
+    }
+
+    private int sum(List<Integer> numbers) {
         int sum = 0;
         for (int number : numbers)
             sum += number;
         return sum;
     }
 
-    private class Parser {
+    private class DelimiterWithNumbers {
         private String delimiter;
-        private String input;
+        private String numbers;
 
-        private Parser(String input) {
-            init(input);
-        }
-
-        private void init(String input) {
-            if (hasDefinedDelimiter(input)) {
-                int i = input.indexOf('\n');
-                delimiter = input.substring(2, i);
-                this.input = input.substring(i + 1);
-            } else {
-                delimiter = ",|\n";
-                this.input = input;
-            }
-        }
-
-        private boolean hasDefinedDelimiter(String input) {
-            return input.startsWith("//");
-        }
-
-        public int[] numbers() {
-            return parseNumbers(split());
-        }
-
-        private String[] split() {
-            return input.split(delimiter);
-        }
-
-        private int[] parseNumbers(String[] strings) {
-            int[] numbers = new int[strings.length];
-            for (int i = 0; i < strings.length; i++)
-                numbers[i] = parseInt(strings[i]);
-            return numbers;
+        private DelimiterWithNumbers(String delimiter, String numbers) {
+            this.delimiter = delimiter;
+            this.numbers = (numbers.isEmpty()) ? "0" : numbers;
         }
     }
 }
