@@ -20,10 +20,6 @@ public class StringCalculator {
         return split(dn);
     }
 
-    private List<String> split(DelimiterWithNumbers input) {
-        return asList(input.numbers.split(input.delimiter));
-    }
-
     private DelimiterWithNumbers extractDelimiterWithNumbers(String input) {
         if (hasDefinedDelimiter(input)) {
             int i = input.indexOf('\n');
@@ -36,6 +32,10 @@ public class StringCalculator {
 
     private boolean hasDefinedDelimiter(String input) {
         return input.startsWith("//");
+    }
+
+    private List<String> split(DelimiterWithNumbers input) {
+        return asList(input.numbers.split(input.delimiter));
     }
 
     private List<Integer> parseNumbers(List<String> strings) {
